@@ -2,6 +2,7 @@ package edu.kis.powp.jobs2d.command;
 
 
 
+import edu.kis.powp.jobs2d.command.visitor.ICommandVisitor;
 import edu.kis.powp.jobs2d.drivers.visitor.VisitableDriver;
 
 import java.util.ArrayList;
@@ -87,5 +88,10 @@ public class ImmutableCompoundCommand implements ICompoundCommand {
         edu.kis.powp.jobs2d.command.visitor.CommandDeepCopyVisitor visitor = new edu.kis.powp.jobs2d.command.visitor.CommandDeepCopyVisitor();
         this.accept(visitor);
         return (ImmutableCompoundCommand) visitor.getCopy();
+    }
+
+    @Override
+    public void accept(ICommandVisitor visitor) {
+        visitor.visit(this);
     }
 }

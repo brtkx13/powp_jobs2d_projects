@@ -131,11 +131,8 @@ public class CompoundCommand implements ICompoundCommand {
 
     @Override
     public CompoundCommand deepCopy() {
-        CompoundCommand copy = new CompoundCommand();
-        copy.name = this.name;
-        for (DriverCommand cmd : commands) {
-            copy.addCommand(cmd.deepCopy());
-        }
-        return copy;
+        edu.kis.powp.jobs2d.command.visitor.CommandDeepCopyVisitor visitor = new edu.kis.powp.jobs2d.command.visitor.CommandDeepCopyVisitor();
+        this.accept(visitor);
+        return (CompoundCommand) visitor.getCopy();
     }
 }

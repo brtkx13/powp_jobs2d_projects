@@ -27,22 +27,37 @@ public class CommandDeepCopyVisitor implements ICommandVisitor {
     @Override
     public void visit(ICompoundCommand command) {
         List<DriverCommand> copiedChildren = new ArrayList<>();
-        for (DriverCommand child : (Iterable<DriverCommand>) command::iterator) {
+        for (DriverCommand child : command) {
             child.accept(this);
             if (copy != null) {
                 copiedChildren.add(copy);
             }
         }
+        copy = new CompoundCommand(copiedChildren, command.toString());
+    }
 
-        if (command instanceof ImmutableCompoundCommand) {
-            String name = ((ImmutableCompoundCommand) command).getName();
-            copy = new ImmutableCompoundCommand(name, copiedChildren);
-        } else if (command instanceof CompoundCommand) {
-            String name = ((CompoundCommand) command).getName();
-            copy = new CompoundCommand(copiedChildren, name);
-        } else {
-            copy = new CompoundCommand(copiedChildren, command.toString());
+    @Override
+    public void visit(CompoundCommand command) {
+        List<DriverCommand> copiedChildren = new ArrayList<>();
+        for (DriverCommand child : command) {
+            child.accept(this);
+            if (copy != null) {
+                copiedChildren.add(copy);
+            }
         }
+        copy = new CompoundCommand(copiedChildren, command.getName());
+    }
+
+    @Override
+    public void visit(ImmutableCompoundCommand command) {
+        List<DriverCommand> copiedChildren = new ArrayList<>();
+        for (DriverCommand child : command) {
+            child.accept(this);
+            if (copy != null) {
+                copiedChildren.add(copy);
+            }
+        }
+        copy = new ImmutableCompoundCommand(command.getName(), copiedChildren);
     }
 
     public DriverCommand getCopy() {

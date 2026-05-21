@@ -85,9 +85,11 @@ public class ImmutableCompoundCommand implements ICompoundCommand {
 
     @Override
     public ImmutableCompoundCommand deepCopy() {
-        edu.kis.powp.jobs2d.command.visitor.CommandDeepCopyVisitor visitor = new edu.kis.powp.jobs2d.command.visitor.CommandDeepCopyVisitor();
-        this.accept(visitor);
-        return (ImmutableCompoundCommand) visitor.getCopy();
+        List<DriverCommand> copiedCommands = new ArrayList<>();
+        for (DriverCommand cmd : commands) {
+            copiedCommands.add(cmd.deepCopy());
+        }
+        return new ImmutableCompoundCommand(this.name, copiedCommands);
     }
 
     @Override

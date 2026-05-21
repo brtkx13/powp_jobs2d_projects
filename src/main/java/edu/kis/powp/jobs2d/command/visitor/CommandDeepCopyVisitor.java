@@ -1,7 +1,6 @@
 package edu.kis.powp.jobs2d.command.visitor;
 
-import java.util.ArrayList;
-import java.util.List;
+import edu.kis.powp.jobs2d.command.SimpleComplexCommandBuilder;
 
 import edu.kis.powp.jobs2d.command.CompoundCommand;
 import edu.kis.powp.jobs2d.command.DriverCommand;
@@ -26,38 +25,38 @@ public class CommandDeepCopyVisitor implements ICommandVisitor {
 
     @Override
     public void visit(ICompoundCommand command) {
-        List<DriverCommand> copiedChildren = new ArrayList<>();
+        SimpleComplexCommandBuilder builder = new SimpleComplexCommandBuilder(command.toString());
         for (DriverCommand child : command) {
             child.accept(this);
             if (copy != null) {
-                copiedChildren.add(copy);
+                builder.addCommand(copy);
             }
         }
-        copy = new CompoundCommand(copiedChildren, command.toString());
+        copy = builder.buildImmutable();
     }
 
     @Override
     public void visit(CompoundCommand command) {
-        List<DriverCommand> copiedChildren = new ArrayList<>();
+        SimpleComplexCommandBuilder builder = new SimpleComplexCommandBuilder(command.getName());
         for (DriverCommand child : command) {
             child.accept(this);
             if (copy != null) {
-                copiedChildren.add(copy);
+                builder.addCommand(copy);
             }
         }
-        copy = new CompoundCommand(copiedChildren, command.getName());
+        copy = builder.build();
     }
 
     @Override
     public void visit(ImmutableCompoundCommand command) {
-        List<DriverCommand> copiedChildren = new ArrayList<>();
+        SimpleComplexCommandBuilder builder = new SimpleComplexCommandBuilder(command.getName());
         for (DriverCommand child : command) {
             child.accept(this);
             if (copy != null) {
-                copiedChildren.add(copy);
+                builder.addCommand(copy);
             }
         }
-        copy = new ImmutableCompoundCommand(command.getName(), copiedChildren);
+        copy = builder.buildImmutable();
     }
 
     public DriverCommand getCopy() {

@@ -30,6 +30,7 @@ import edu.kis.powp.jobs2d.events.SelectCountCommandsOptionListener;
 import edu.kis.powp.jobs2d.events.SelectFullNameGetterVisitorTestListener;
 import edu.kis.powp.jobs2d.events.SelectLoadImmutableRectangleCommandOptionListener;
 import edu.kis.powp.jobs2d.events.SelectLoadKiteCommandOptionListener;
+import edu.kis.powp.jobs2d.events.SelectLoadDeepCompoundCommandOptionListener;
 import edu.kis.powp.jobs2d.events.SelectLoadRecordedMacroOptionListener;
 import edu.kis.powp.jobs2d.events.SelectLoadSecretCommandOptionListener;
 import edu.kis.powp.jobs2d.events.SelectRunCurrentCommandOptionListener;
@@ -74,6 +75,7 @@ public class TestJobs2dApp {
                                 new SelectLoadImmutableRectangleCommandOptionListener());
 
                 application.addTest("Load kite command", new SelectLoadKiteCommandOptionListener());
+                application.addTest("Load deep compound command", new SelectLoadDeepCompoundCommandOptionListener());
                 application.addTest("Load recorded macro", new SelectLoadRecordedMacroOptionListener());
 
                 application.addTest("Clear panel", new SelectClearPanelOptionListener());

@@ -26,37 +26,31 @@ public class CommandDeepCopyVisitor implements ICommandVisitor {
     @Override
     public void visit(ICompoundCommand command) {
         SimpleComplexCommandBuilder builder = new SimpleComplexCommandBuilder(command.toString());
-        for (DriverCommand child : command) {
-            child.accept(this);
-            if (copy != null) {
-                builder.addCommand(copy);
-            }
-        }
+        buildChildren(builder, command);
         copy = builder.buildImmutable();
     }
 
     @Override
     public void visit(CompoundCommand command) {
         SimpleComplexCommandBuilder builder = new SimpleComplexCommandBuilder(command.getName());
-        for (DriverCommand child : command) {
-            child.accept(this);
-            if (copy != null) {
-                builder.addCommand(copy);
-            }
-        }
+        buildChildren(builder, command);
         copy = builder.build();
     }
 
     @Override
     public void visit(ImmutableCompoundCommand command) {
         SimpleComplexCommandBuilder builder = new SimpleComplexCommandBuilder(command.getName());
+        buildChildren(builder, command);
+        copy = builder.buildImmutable();
+    }
+
+    private void buildChildren(SimpleComplexCommandBuilder builder, ICompoundCommand command) {
         for (DriverCommand child : command) {
             child.accept(this);
             if (copy != null) {
                 builder.addCommand(copy);
             }
         }
-        copy = builder.buildImmutable();
     }
 
     public DriverCommand getCopy() {
